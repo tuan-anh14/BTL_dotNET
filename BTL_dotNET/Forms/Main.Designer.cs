@@ -30,17 +30,17 @@
         {
             mnusQL = new MenuStrip();
             mnuQuanLy = new ToolStripMenuItem();
-            mnuHopDong = new ToolStripMenuItem();
-            mnuBaoCao = new ToolStripMenuItem();
-            mnuTimKiem = new ToolStripMenuItem();
-            mnuThoat = new ToolStripMenuItem();
             mnuNhanVien = new ToolStripMenuItem();
             mnuKhachHang = new ToolStripMenuItem();
             mnuBao = new ToolStripMenuItem();
-            mnuTKKhachHang = new ToolStripMenuItem();
-            mnuTKHopDong = new ToolStripMenuItem();
+            mnuHopDong = new ToolStripMenuItem();
             mnuHDQuangCao = new ToolStripMenuItem();
             mnuHDVietBai = new ToolStripMenuItem();
+            mnuBaoCao = new ToolStripMenuItem();
+            mnuTimKiem = new ToolStripMenuItem();
+            mnuTKKhachHang = new ToolStripMenuItem();
+            mnuTKHopDong = new ToolStripMenuItem();
+            mnuThoat = new ToolStripMenuItem();
             mnusQL.SuspendLayout();
             SuspendLayout();
             // 
@@ -55,7 +55,6 @@
             mnusQL.Size = new Size(1160, 28);
             mnusQL.TabIndex = 0;
             mnusQL.Text = "menuStrip1";
-            mnusQL.ItemClicked += this.mnusQL_ItemClicked;
             // 
             // mnuQuanLy
             // 
@@ -64,12 +63,42 @@
             mnuQuanLy.Size = new Size(73, 24);
             mnuQuanLy.Text = "Quản lý";
             // 
+            // mnuNhanVien
+            // 
+            mnuNhanVien.Name = "mnuNhanVien";
+            mnuNhanVien.Size = new Size(169, 26);
+            mnuNhanVien.Text = "Nhân viên";
+            // 
+            // mnuKhachHang
+            // 
+            mnuKhachHang.Name = "mnuKhachHang";
+            mnuKhachHang.Size = new Size(169, 26);
+            mnuKhachHang.Text = "Khách hàng";
+            // 
+            // mnuBao
+            // 
+            mnuBao.Name = "mnuBao";
+            mnuBao.Size = new Size(169, 26);
+            mnuBao.Text = "Báo";
+            // 
             // mnuHopDong
             // 
             mnuHopDong.DropDownItems.AddRange(new ToolStripItem[] { mnuHDQuangCao, mnuHDVietBai });
             mnuHopDong.Name = "mnuHopDong";
             mnuHopDong.Size = new Size(91, 24);
             mnuHopDong.Text = "Hợp đồng";
+            // 
+            // mnuHDQuangCao
+            // 
+            mnuHDQuangCao.Name = "mnuHDQuangCao";
+            mnuHDQuangCao.Size = new Size(282, 26);
+            mnuHDQuangCao.Text = "Chi tiết hợp đồng quảng cáo";
+            // 
+            // mnuHDVietBai
+            // 
+            mnuHDVietBai.Name = "mnuHDVietBai";
+            mnuHDVietBai.Size = new Size(282, 26);
+            mnuHDVietBai.Text = "Chi tiết hợp đồng viết bài";
             // 
             // mnuBaoCao
             // 
@@ -84,53 +113,24 @@
             mnuTimKiem.Size = new Size(84, 24);
             mnuTimKiem.Text = "Tìm kiếm";
             // 
-            // mnuThoat
-            // 
-            mnuThoat.Name = "mnuThoat";
-            mnuThoat.Size = new Size(61, 24);
-            mnuThoat.Text = "Thoát";
-            // 
-            // mnuNhanVien
-            // 
-            mnuNhanVien.Name = "mnuNhanVien";
-            mnuNhanVien.Size = new Size(224, 26);
-            mnuNhanVien.Text = "Nhân viên";
-            // 
-            // mnuKhachHang
-            // 
-            mnuKhachHang.Name = "mnuKhachHang";
-            mnuKhachHang.Size = new Size(224, 26);
-            mnuKhachHang.Text = "Khách hàng";
-            // 
-            // mnuBao
-            // 
-            mnuBao.Name = "mnuBao";
-            mnuBao.Size = new Size(224, 26);
-            mnuBao.Text = "Báo";
-            // 
             // mnuTKKhachHang
             // 
             mnuTKKhachHang.Name = "mnuTKKhachHang";
-            mnuTKKhachHang.Size = new Size(224, 26);
+            mnuTKKhachHang.Size = new Size(169, 26);
             mnuTKKhachHang.Text = "Khách hàng";
             // 
             // mnuTKHopDong
             // 
             mnuTKHopDong.Name = "mnuTKHopDong";
-            mnuTKHopDong.Size = new Size(224, 26);
+            mnuTKHopDong.Size = new Size(169, 26);
             mnuTKHopDong.Text = "Hợp đồng";
             // 
-            // mnuHDQuangCao
+            // mnuThoat
             // 
-            mnuHDQuangCao.Name = "mnuHDQuangCao";
-            mnuHDQuangCao.Size = new Size(282, 26);
-            mnuHDQuangCao.Text = "Chi tiết hợp đồng quảng cáo";
-            // 
-            // mnuHDVietBai
-            // 
-            mnuHDVietBai.Name = "mnuHDVietBai";
-            mnuHDVietBai.Size = new Size(282, 26);
-            mnuHDVietBai.Text = "Chi tiết hợp đồng viết bài";
+            mnuThoat.Name = "mnuThoat";
+            mnuThoat.Size = new Size(61, 24);
+            mnuThoat.Text = "Thoát";
+            mnuThoat.Click += mnuThoat_Click;
             // 
             // frmMainQL
             // 
@@ -144,7 +144,7 @@
             MainMenuStrip = mnusQL;
             Name = "frmMainQL";
             Text = "Quản lý Hợp đồng Quảng cáo và Viết bài";
-            Load += this.Main_Load;
+            Load += frmMainQL_Load;
             mnusQL.ResumeLayout(false);
             mnusQL.PerformLayout();
             ResumeLayout(false);

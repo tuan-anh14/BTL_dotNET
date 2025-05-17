@@ -16,5 +16,18 @@ namespace BTL_dotNET.Forms
         {
             InitializeComponent();
         }
+
+        private void frmMainQL_Load(object sender, EventArgs e)
+        {
+            Class.Functions.Connect();
+        }
+
+        private void mnuThoat_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Bạn muốn thoát khỏi chương trình?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
     }
 }
