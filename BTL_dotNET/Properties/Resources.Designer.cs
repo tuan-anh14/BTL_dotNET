@@ -63,6 +63,16 @@ namespace BTL_dotNET.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _094835hop_dong_lao_dong_vo_hieu {
+            get {
+                object obj = ResourceManager.GetObject("094835hop-dong-lao-dong-vo-hieu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mot_so_bat_cap_trong_quy_dinh_ve_hop_dong_vi_loi_ich_cua_nguoi_thu_ba {
             get {
                 object obj = ResourceManager.GetObject("mot-so-bat-cap-trong-quy-dinh-ve-hop-dong-vi-loi-ich-cua-nguoi-thu-ba", resourceCulture);
