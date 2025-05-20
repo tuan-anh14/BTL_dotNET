@@ -188,6 +188,7 @@
             btnThemdichvu.TabIndex = 13;
             btnThemdichvu.Text = "Thêm dịch vụ";
             btnThemdichvu.UseVisualStyleBackColor = true;
+            btnThemdichvu.Click += btnThemdichvu_Click;
             // 
             // btnCapnhat
             // 
@@ -197,6 +198,7 @@
             btnCapnhat.TabIndex = 14;
             btnCapnhat.Text = "Cập nhật";
             btnCapnhat.UseVisualStyleBackColor = true;
+            btnCapnhat.Click += btnCapnhat_Click;
             // 
             // btnBoqua
             // 
@@ -206,6 +208,7 @@
             btnBoqua.TabIndex = 15;
             btnBoqua.Text = "Bỏ qua";
             btnBoqua.UseVisualStyleBackColor = true;
+            btnBoqua.Click += btnBoqua_Click;
             // 
             // btnLuu
             // 
@@ -215,6 +218,7 @@
             btnLuu.TabIndex = 15;
             btnLuu.Text = "Lưu";
             btnLuu.UseVisualStyleBackColor = true;
+            btnLuu.Click += btnLuu_Click;
             // 
             // btnDong
             // 
@@ -224,6 +228,7 @@
             btnDong.TabIndex = 16;
             btnDong.Text = "Đóng";
             btnDong.UseVisualStyleBackColor = true;
+            btnDong.Click += btnDong_Click;
             // 
             // lblNoidung
             // 
@@ -241,6 +246,7 @@
             cboMabao.Name = "cboMabao";
             cboMabao.Size = new Size(151, 28);
             cboMabao.TabIndex = 18;
+            cboMabao.SelectedIndexChanged += cboMabao_SelectedIndexChanged;
             // 
             // cboMadichvu
             // 
@@ -249,6 +255,7 @@
             cboMadichvu.Name = "cboMadichvu";
             cboMadichvu.Size = new Size(151, 28);
             cboMadichvu.TabIndex = 19;
+            cboMadichvu.SelectedIndexChanged += cboMadichvu_SelectedIndexChanged;
             // 
             // txtMaCTQC
             // 
@@ -307,6 +314,7 @@
             mskNgaybatdau.Size = new Size(125, 27);
             mskNgaybatdau.TabIndex = 28;
             mskNgaybatdau.ValidatingType = typeof(DateTime);
+            mskNgaybatdau.MaskInputRejected += mskNgaybatdau_MaskInputRejected;
             // 
             // mskNgayketthuc
             // 

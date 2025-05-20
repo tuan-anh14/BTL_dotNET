@@ -69,7 +69,7 @@ namespace BTL_dotNET.Forms
                 "from quangcao a full join chitietquangcao b on a.maqc=b.maqc where a.maqc='" + maqc + "' " + "group by a.maqc"));
             if (txtTongtien.Text != "0")
             {
-                lblBangchu.Text = "Bằng chữ: " + Class.Functions.ConvertNumberToString(txttongtien.Text);
+                lblBangchu.Text = "Bằng chữ: " + Class.Functions.ConvertNumberToString(txtTongtien.Text);
             }
             else
             {
@@ -137,6 +137,288 @@ namespace BTL_dotNET.Forms
         private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void cboMadichvu_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cboMadichvu_TextChanged(object sender, EventArgs e)
+        {
+            if (cboMadichvu.Text == "")
+            {
+                txtDichvu.Text = "";
+            }
+            else if (cboMadichvu.Text != "" && cboMabao.Text == "")
+            {
+                txtDichvu.Text = Class.Functions.GetFieldValues("select dichvu from dichvu where madv ='" + cboMadichvu.SelectedValue + "'");
+                txtDongia.Text = "0";
+            }
+            else
+            {
+                txtDichvu.Text = Class.Functions.GetFieldValues("select dichvu from dichvu where madv ='" + cboMadichvu.SelectedValue + "'");
+                txtDongia.Text = Class.Functions.GetFieldValues("select dongia from banggiaqc where mabao = '" + cboMabao.SelectedValue + "' and madv = '" + cboMadichvu.SelectedValue + "'");
+            }
+        }
+
+        private void cboMabao_TextChanged(object sender, EventArgs e)
+        {
+            if (cboMabao.Text == "")
+            {
+                txtTenbao.Text = "";
+            }
+            else if (cboMadichvu.Text == "" && cboMabao.Text != "")
+            {
+                txtTenbao.Text = Class.Functions.GetFieldValues("select tenbao from bao where mabao ='" + cboMabao.SelectedValue + "'");
+                txtDongia.Text = "0";
+            }
+            else
+            {
+                txtTenbao.Text = Class.Functions.GetFieldValues("select tenbao from bao where mabao ='" + cboMabao.SelectedValue + "'");
+                txtDongia.Text = Class.Functions.GetFieldValues("select dongia from banggiaqc where mabao = '" + cboMabao.SelectedValue + "' and madv = '" + cboMadichvu.SelectedValue + "'");
+            }
+        }
+
+        private void cboMabao_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnBoqua_Click(object sender, EventArgs e)
+        {
+            resetvalues();
+            btnBoqua.Enabled = false;
+            btnLuu.Enabled = false;
+            btnThemdichvu.Enabled = true;
+            btnCapnhat.Enabled = false;
+        }
+
+        private void btnCapnhat_Click(object sender, EventArgs e)
+        {
+            if (cboMabao.Text == "" && cboMadichvu.Text == "")
+            {
+                MessageBox.Show("Bạn chưa chọn bản ghi nào!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (mskNgaybatdau.Text == "  /  /")
+            {
+                MessageBox.Show("Bạn chưa nhập ngày bắt đầu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgaybatdau.Focus();
+                return;
+            }
+            if (mskNgayketthuc.Text == "  /  /")
+            {
+                MessageBox.Show("Bạn chưa nhập ngày kết thúc!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayketthuc.Focus();
+                return;
+            }
+            if (!Class.Functions.Isdate(mskNgaybatdau.Text) && !Class.Functions.Isdate(mskNgayketthuc.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgaybatdau.Focus();
+                mskNgaybatdau.Text = "";
+                mskNgayketthuc.Text = "";
+                return;
+            }
+            if (!Class.Functions.Isdate(mskNgaybatdau.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày tháng, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgaybatdau.Focus();
+                mskNgaybatdau.Text = "";
+                return;
+            }
+            if (!Class.Functions.Isdate(mskNgayketthuc.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày tháng, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayketthuc.Focus();
+                mskNgayketthuc.Text = "";
+                return;
+            }
+            if (Convert.ToInt32(txtThanhtien.Text) == 0)
+            {
+                MessageBox.Show("Ngày kết thúc phải lớn hơn ngày bắt đầu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayketthuc.Focus();
+                mskNgayketthuc.Text = "";
+                return;
+            }
+            if (txtNoidung.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa nhập nội dung!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNoidung.Focus();
+                return;
+            }
+            string sql;
+            sql = "update chitietquangcao set mabao ='" + cboMabao.SelectedValue.ToString() + "', madv ='" + cboMadichvu.SelectedValue.ToString() + "', noidung =N'" +
+                txtNoidung.Text + "', ngaybd ='" + Class.Functions.ConvertDate(mskNgaybatdau.Text) + "', ngaykt ='" + Class.Functions.ConvertDate(mskNgayketthuc.Text) +
+                "', dongia ='" + txtDongia.Text + "' where mactqc ='" + txtMaCTQC.Text + "'";
+            Class.Functions.Runsql(sql);
+            load_data();
+            resetvalues();
+            btnCapnhat.Enabled = false;
+            btnBoqua.Enabled = false;
+            btnLuu.Enabled = false;
+        }
+
+        private void btnDong_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Bạn muốn đóng chương trình?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                this.Close();
+            }
+        }
+
+        private void btnThemdichvu_Click(object sender, EventArgs e)
+        {
+            resetvalues();
+            btnThemdichvu.Enabled = false;
+            btnLuu.Enabled = true;
+            btnBoqua.Enabled = true;
+            btnCapnhat.Enabled = false;
+            txtMaCTQC.Text = Class.Functions.CreateKey("CTQC");
+        }
+
+        private void btnLuu_Click(object sender, EventArgs e)
+        {
+            if (cboMabao.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa chọn mã báo!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboMabao.Focus();
+                return;
+            }
+            if (cboMadichvu.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa chọn mã dịch vụ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboMadichvu.Focus();
+                return;
+            }
+            if (mskNgaybatdau.Text == "  /  /")
+            {
+                MessageBox.Show("Bạn chưa nhập ngày bắt đầu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgaybatdau.Focus();
+                return;
+            }
+            if (mskNgayketthuc.Text == "  /  /")
+            {
+                MessageBox.Show("Bạn chưa nhập ngày kết thúc!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayketthuc.Focus();
+                return;
+            }
+            if (!Class.Functions.Isdate(mskNgaybatdau.Text) && !Class.Functions.Isdate(mskNgayketthuc.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgaybatdau.Focus();
+                mskNgaybatdau.Text = "";
+                mskNgayketthuc.Text = "";
+                return;
+            }
+            if (!Class.Functions.Isdate(mskNgaybatdau.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgaybatdau.Focus();
+                mskNgaybatdau.Text = "";
+                return;
+            }
+            if (!Class.Functions.Isdate(mskNgayketthuc.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayketthuc.Focus();
+                mskNgayketthuc.Text = "";
+                return;
+            }
+            if (Convert.ToInt32(txtThanhtien.Text) == 0)
+            {
+                MessageBox.Show("Ngày kết thúc phải lớn hơn ngày bắt đầu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayketthuc.Focus();
+                mskNgayketthuc.Text = "";
+                return;
+            }
+            if (txtNoidung.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa điền nội dụng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNoidung.Focus();
+                return;
+            }
+            string sql;
+            sql = "insert into chitietquangcao (mactqc,mabao,madv,noidung,ngaybd,ngaykt,dongia,maqc) values ('" + txtMaCTQC.Text + "','" + cboMabao.SelectedValue.ToString() + "','" +
+                cboMadichvu.SelectedValue.ToString() + "',N'" + txtNoidung.Text + "','" + Class.Functions.ConvertDate(mskNgaybatdau.Text) + "','" +
+                Class.Functions.ConvertDate(mskNgayketthuc.Text) + "'," + txtDongia.Text + ",'" + maqc + "')";
+            Class.Functions.Runsql(sql);
+            load_data();
+            resetvalues();
+            btnLuu.Enabled = false;
+            btnThemdichvu.Enabled = true;
+            btnBoqua.Enabled = false;
+        }
+
+        private void mskNgaybatdau_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void mskNgaybatdau_TextChanged(object sender, EventArgs e)
+        {
+            if (mskNgaybatdau.Text.Length == 10 && mskNgaybatdau.Text.IndexOf(' ') == -1 && mskNgayketthuc.Text.Length == 10 && mskNgayketthuc.Text.IndexOf(' ') == -1
+                && Class.Functions.Isdate(mskNgaybatdau.Text) && Class.Functions.Isdate(mskNgayketthuc.Text))
+            {
+                txtThanhtien.Text = Convert.ToString(Class.Functions.DateDiff(mskNgaybatdau.Text, mskNgayketthuc.Text) * Convert.ToInt32(txtDongia.Text));
+            }
+            else
+            {
+                txtThanhtien.Text = "0";
+            }
+        }
+
+        private void mskNgayketthuc_TextChanged(object sender, EventArgs e)
+        {
+            if (mskNgayketthuc.Text.Length == 10 && mskNgayketthuc.Text.IndexOf(' ') == -1 && mskNgayketthuc.Text.Length == 10 && mskNgayketthuc.Text.IndexOf(' ') == -1
+                && Class.Functions.Isdate(mskNgaybatdau.Text) && Class.Functions.Isdate(mskNgayketthuc.Text))
+            {
+                txtThanhtien.Text = Convert.ToString(Class.Functions.DateDiff(mskNgaybatdau.Text, mskNgayketthuc.Text) * Convert.ToInt32(txtDongia.Text));
+            }
+            else
+            {
+                txtThanhtien.Text = "0";
+            }
+        }
+
+        private void DataGridView_DoubleClick(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Bạn có chắc chắn muốn xóa dịch vụ quảng cáo này?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                string sql;
+                sql = "delete from chitietquangcao where mactqc = '" + txtMaCTQC.Text + "'";
+                Class.Functions.Runsqldel(sql);
+                load_data();
+                resetvalues();
+                btnBoqua.Enabled = false;
+                btnCapnhat.Enabled = false;
+            }
+        }
+
+
+        private void txtDongia_TextChanged(object sender, EventArgs e)
+        {
+            if (txtDongia.Text != "" && mskNgayketthuc.Text.Length == 10 && mskNgayketthuc.Text.IndexOf(' ') == -1 && mskNgayketthuc.Text.Length == 10 && mskNgayketthuc.Text.IndexOf(' ') == -1
+                && Class.Functions.Isdate(mskNgaybatdau.Text) && Class.Functions.Isdate(mskNgayketthuc.Text))
+            {
+                txtThanhtien.Text = Convert.ToString(Class.Functions.DateDiff(mskNgaybatdau.Text, mskNgayketthuc.Text) * Convert.ToInt32(txtDongia.Text));
+            }
+            else
+            {
+                txtThanhtien.Text = "0";
+            }
+        }
+
+        private void txtThanhtien_TextChanged(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(txtThanhtien.Text) < 0)
+            {
+                MessageBox.Show("Hãy nhập ngày kết thúc lớn hơn ngày bắt đầu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayketthuc.Text = "";
+                mskNgayketthuc.Focus();
+                return;
+            }
         }
     }
 }
