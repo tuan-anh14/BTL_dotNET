@@ -277,6 +277,7 @@
             cboManhanvien.Name = "cboManhanvien";
             cboManhanvien.Size = new Size(151, 28);
             cboManhanvien.TabIndex = 24;
+            cboManhanvien.SelectedIndexChanged += cboManhanvien_SelectedIndexChanged;
             // 
             // cboMakhachhang
             // 
@@ -285,6 +286,7 @@
             cboMakhachhang.Name = "cboMakhachhang";
             cboMakhachhang.Size = new Size(151, 28);
             cboMakhachhang.TabIndex = 25;
+            cboMakhachhang.SelectedIndexChanged += cboMakhachhang_SelectedIndexChanged;
             // 
             // cboMahopdong
             // 

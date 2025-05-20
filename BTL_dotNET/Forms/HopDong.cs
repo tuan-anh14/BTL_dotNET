@@ -118,7 +118,7 @@ namespace BTL_dotNET.Forms
 
         private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            
+
         }
 
         private void DataGridView_DoubleClick(object sender, EventArgs e)
@@ -138,6 +138,35 @@ namespace BTL_dotNET.Forms
                 b.ShowDialog(this); //hiển thị form a
             }
         }
+
+        private void cboManhanvien_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboManhanvien.Text == "")
+            {
+                txtTennhanvien.Text = "";
+            }
+            else
+            {
+                txtTennhanvien.Text = Class.Functions.GetFieldValues("select tennv from nhanvien where manv = '" + cboManhanvien.SelectedValue + "'");
+            }
+        }
+
+        private void cboMakhachhang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboMakhachhang.Text == "")
+            {
+                txtTenkhachhang.Text = "";
+                txtDiachi.Text = "";
+                mskDienthoai.Text = "";
+            }
+            else
+            {
+                txtTenkhachhang.Text = Class.Functions.GetFieldValues("select tenkh from khachhang where makh = '" + cboMakhachhang.SelectedValue + "'");
+                txtDiachi.Text = Class.Functions.GetFieldValues("Select diachi from khachhang where makh = '" + cboMakhachhang.SelectedValue + "'");
+                mskDienthoai.Text = Class.Functions.GetFieldValues("select dienthoai from khachhang where makh = '" + cboMakhachhang.SelectedValue + "'");
+            }
+        }
+
 
     }
 }
