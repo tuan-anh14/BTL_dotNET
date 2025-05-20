@@ -106,6 +106,204 @@ namespace BTL_dotNET.Forms
             DataGridView.EditMode = DataGridViewEditMode.EditProgrammatically;
         }
 
+        private void cbomabao_TextChanged(object sender, EventArgs e)
+        {
+            if (cbomabao.Text == "")
+            {
+                txttenbao.Text = "";
+            }
+            else if (cbomabao.Text != "" && cbomatheloai.Text == "")
+            {
+                txttenbao.Text = Class.Functions.GetFieldValues("select tenbao from bao where mabao ='" + cbomabao.SelectedValue + "'");
+                txtnhuanbut.Text = "0";
+            }
+            else
+            {
+                txttenbao.Text = Class.Functions.GetFieldValues("select tenbao from bao where mabao ='" + cbomabao.SelectedValue + "'");
+                txtnhuanbut.Text = Class.Functions.GetFieldValues("select nhuanbut from banggiavb where mabao = '" + cbomabao.SelectedValue + "' and matheloai = '" + cbomatheloai.SelectedValue + "'");
+            }
+        }
 
+        private void cbomatheloai_TextChanged(object sender, EventArgs e)
+        {
+            if (cbomatheloai.Text == "")
+            {
+                txttheloai.Text = "";
+            }
+            else if (cbomabao.Text == "" && cbomatheloai.Text != "")
+            {
+                txttheloai.Text = Class.Functions.GetFieldValues("select theloai from theloai where matheloai ='" + cbomatheloai.SelectedValue + "'");
+                txtnhuanbut.Text = "0";
+            }
+            else
+            {
+                txttheloai.Text = Class.Functions.GetFieldValues("select theloai from theloai where matheloai ='" + cbomatheloai.SelectedValue + "'");
+                txtnhuanbut.Text = Class.Functions.GetFieldValues("select nhuanbut from banggiavb where mabao = '" + cbomabao.SelectedValue + "' and matheloai = '" + cbomatheloai.SelectedValue + "'");
+            }
+        }
+
+        private void btnthem_Click(object sender, EventArgs e)
+        {
+            resetvalues();
+            btnthem.Enabled = false;
+            btnluu.Enabled = true;
+            btnboqua.Enabled = true;
+            btncapnhat.Enabled = false;
+            txtmactvb.Text = Class.Functions.CreateKey("CTVB");
+        }
+
+        private void btnboqua_Click(object sender, EventArgs e)
+        {
+            resetvalues();
+            btnboqua.Enabled = false;
+            btnluu.Enabled = false;
+            btnthem.Enabled = true;
+            btncapnhat.Enabled = false;
+        }
+
+        private void btnluu_Click(object sender, EventArgs e)
+        {
+            if (cbomabao.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa chọn mã báo!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cbomabao.Focus();
+                return;
+            }
+            if (cbomatheloai.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa chọn mã thể loại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cbomatheloai.Focus();
+                return;
+            }
+            if (mskngaydang.Text == "  /  /")
+            {
+                MessageBox.Show("Bạn chưa nhập ngày đăng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskngaydang.Focus();
+                return;
+            }
+            if (!Class.Functions.Isdate(mskngaydang.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskngaydang.Focus();
+                mskngaydang.Text = "";
+                return;
+            }
+            if (txttieude.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa điền tiêu đề!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txttieude.Focus();
+                return;
+            }
+            if (txtnoidung.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa điền nội dụng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtnoidung.Focus();
+                return;
+            }
+            string sql;
+            sql = "insert into chitietvietbai (mactvb,mabao,matheloai,tieude,noidung,ngaydang,nhuanbut,mavb) values ('" + txtmactvb.Text + "','" + cbomabao.SelectedValue.ToString() + "','" +
+                cbomatheloai.SelectedValue.ToString() + "',N'" + txttieude.Text + "',N'" + txtnoidung.Text + "','" + Class.Functions.ConvertDate(mskngaydang.Text) + "'," +
+                txtnhuanbut.Text + ",'" + mavb + "')";
+            Class.Functions.Runsql(sql);
+            load_data();
+            resetvalues();
+            btnluu.Enabled = false;
+            btnthem.Enabled = true;
+            btnboqua.Enabled = false;
+        }
+
+        private void btncapnhat_Click(object sender, EventArgs e)
+        {
+            if (cbomabao.Text == "" && cbomatheloai.Text == "")
+            {
+                MessageBox.Show("Bạn chưa chọn bản ghi nào!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (mskngaydang.Text == "  /  /")
+            {
+                MessageBox.Show("Bạn chưa nhập ngày đăng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskngaydang.Focus();
+                return;
+            }
+            if (!Class.Functions.Isdate(mskngaydang.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày tháng, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskngaydang.Focus();
+                mskngaydang.Text = "";
+                return;
+            }
+            if (txttieude.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa điền tiêu đề!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txttieude.Focus();
+                return;
+            }
+            if (txtnoidung.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa nhập nội dung!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtnoidung.Focus();
+                return;
+            }
+            string sql;
+            sql = "update chitietvietbai set mabao ='" + cbomabao.SelectedValue.ToString() + "', matheloai ='" + cbomatheloai.SelectedValue.ToString() + "', noidung =N'" +
+                txtnoidung.Text + "', ngaydang ='" + Class.Functions.ConvertDate(mskngaydang.Text) + "', tieude =N'" +
+                txttieude.Text + "', nhuanbut ='" + txtnhuanbut.Text + "' where mactvb ='" + txtmactvb.Text + "'";
+            Class.Functions.Runsql(sql);
+            load_data();
+            resetvalues();
+            btncapnhat.Enabled = false;
+            btnboqua.Enabled = false;
+            btnluu.Enabled = false;
+        }
+
+        private void DataGridView_Click(object sender, EventArgs e)
+        {
+            if (tblcthopdong.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu trong bảng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (btnthem.Enabled == false)
+            {
+                MessageBox.Show("Đang ở chế độ thêm mới!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            txtmactvb.Text = DataGridView.CurrentRow.Cells["mactvb"].Value.ToString();
+            string mabao, matheloai;
+            mabao = DataGridView.CurrentRow.Cells["mabao"].Value.ToString();
+            cbomabao.Text = Class.Functions.GetFieldValues("select mabao from bao where mabao ='" + mabao + "'");
+            matheloai = DataGridView.CurrentRow.Cells["matheloai"].Value.ToString();
+            cbomatheloai.Text = Class.Functions.GetFieldValues("select matheloai from theloai where matheloai ='" + matheloai + "'");
+            txttieude.Text = DataGridView.CurrentRow.Cells["tieude"].Value.ToString();
+            txtnoidung.Text = DataGridView.CurrentRow.Cells["noidung"].Value.ToString();
+            txtnhuanbut.Text = Class.Functions.GetFieldValues("Select nhuanbut from banggiavb where mabao ='" + mabao + "' and matheloai = '" + matheloai + "'");
+            mskngaydang.Text = DataGridView.CurrentRow.Cells["ngaydang"].Value.ToString();
+            btncapnhat.Enabled = true;
+            btnboqua.Enabled = true;
+        }
+
+        private void btndong_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Bạn muốn đóng chương trình?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                this.Close();
+            }
+        }
+
+        private void DataGridView_DoubleClick(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Bạn có chắc chắn muốn xóa bài viết này?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                string sql;
+                sql = "delete from chitietvietbai where mactvb = '" + txtmactvb.Text + "'";
+                Class.Functions.Runsqldel(sql);
+                load_data();
+                resetvalues();
+                btnboqua.Enabled = false;
+                btncapnhat.Enabled = false;
+            }
+        }
     }
+
+
 }
