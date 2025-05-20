@@ -41,5 +41,17 @@ namespace BTL_dotNET.Forms
             pnlcontent.Controls.Add(a);
             a.Show();
         }
+
+        private void mnuCTHDQuangcao_Click(object sender, EventArgs e)
+        {
+            ChiTietHDQuangCao a = new ChiTietHDQuangCao();
+            a.FormBorderStyle = FormBorderStyle.None;
+            a.Dock = DockStyle.Fill;
+            a.TopLevel = false;
+            a.TopMost = true;
+            pnlcontent.Controls.Clear();
+            pnlcontent.Controls.Add(a);
+            a.Show();
+        }
     }
 }

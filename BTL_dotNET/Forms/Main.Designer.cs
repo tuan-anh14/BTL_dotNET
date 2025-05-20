@@ -40,6 +40,8 @@
             mnuTKHopDong = new ToolStripMenuItem();
             mnuThoat = new ToolStripMenuItem();
             pnlcontent = new Panel();
+            mnuCTHDQuangcao = new ToolStripMenuItem();
+            mnuCTHDVietbai = new ToolStripMenuItem();
             mnusQL.SuspendLayout();
             SuspendLayout();
             // 
@@ -82,6 +84,7 @@
             // 
             // mnuHopDong
             // 
+            mnuHopDong.DropDownItems.AddRange(new ToolStripItem[] { mnuCTHDQuangcao, mnuCTHDVietbai });
             mnuHopDong.Name = "mnuHopDong";
             mnuHopDong.Size = new Size(91, 24);
             mnuHopDong.Text = "Hợp đồng";
@@ -131,6 +134,19 @@
             pnlcontent.Size = new Size(1160, 595);
             pnlcontent.TabIndex = 2;
             // 
+            // mnuCTHDQuangcao
+            // 
+            mnuCTHDQuangcao.Name = "mnuCTHDQuangcao";
+            mnuCTHDQuangcao.Size = new Size(282, 26);
+            mnuCTHDQuangcao.Text = "Chi tiết hợp đồng quảng cáo";
+            mnuCTHDQuangcao.Click += mnuCTHDQuangcao_Click;
+            // 
+            // mnuCTHDVietbai
+            // 
+            mnuCTHDVietbai.Name = "mnuCTHDVietbai";
+            mnuCTHDVietbai.Size = new Size(282, 26);
+            mnuCTHDVietbai.Text = "Chi tiết hợp đồng viết bài";
+            // 
             // frmMainQL
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -164,5 +180,7 @@
         private ToolStripMenuItem mnuTKHopDong;
         private ToolStripMenuItem mnuThoat;
         private Panel pnlcontent;
+        private ToolStripMenuItem mnuCTHDQuangcao;
+        private ToolStripMenuItem mnuCTHDVietbai;
     }
 }
