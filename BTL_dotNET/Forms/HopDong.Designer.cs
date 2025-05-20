@@ -219,6 +219,7 @@
             btnTimkiem.TabIndex = 16;
             btnTimkiem.Text = "Tìm kiếm";
             btnTimkiem.UseVisualStyleBackColor = true;
+            btnTimkiem.Click += btnTimkiem_Click;
             // 
             // btnXuathopdong
             // 
@@ -238,6 +239,7 @@
             btnDong.TabIndex = 18;
             btnDong.Text = "Đóng";
             btnDong.UseVisualStyleBackColor = true;
+            btnDong.Click += btnDong_Click;
             // 
             // DataGridView
             // 

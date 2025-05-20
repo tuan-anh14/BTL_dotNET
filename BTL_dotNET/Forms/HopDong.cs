@@ -565,5 +565,26 @@ namespace BTL_dotNET.Forms
             exRange.Range["A3:C3"].Value = txtTennhanvien.Text;
             exApp.Visible = true;
         }
+
+        private void btnDong_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Bạn muốn đóng chương trình?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                this.Close();
+            }
+        }
+
+        private void btnTimkiem_Click(object sender, EventArgs e)
+        {
+            if (cboMahopdong.Text == "")
+            {
+                MessageBox.Show("Bạn phải chọn một mã hợp đồng để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboMahopdong.Focus();
+                return;
+            }
+            load_data();
+            cboMahopdong.SelectedIndex = -1;
+            btnLammoi.Enabled = true;
+        }
     }
 }
