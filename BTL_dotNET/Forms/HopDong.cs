@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using COMExcel = Microsoft.Office.Interop.Excel;
 
 namespace BTL_dotNET.Forms
 {
@@ -44,7 +45,7 @@ namespace BTL_dotNET.Forms
             btnHuyHD.Enabled = false;
             btnLuu.Enabled = false;
             btnLammoi.Enabled = false;
-            btnXuathop.Enabled = false;
+            btnXuathopdong.Enabled = false;
             Class.Functions.Fillcombo("select maqc as mahd ,ngayky from quangcao union select mavb as mahd,ngayky from vietbai", cboMahopdong, "mahd", "mahd");
             cboMahopdong.SelectedIndex = -1;
         }
@@ -113,7 +114,7 @@ namespace BTL_dotNET.Forms
             btnSua.Enabled = true;
             btnHuyHD.Enabled = true;
             btnLammoi.Enabled = true;
-            btnXuathop.Enabled = true;
+            btnXuathopdong.Enabled = true;
         }
 
         private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -201,7 +202,7 @@ namespace BTL_dotNET.Forms
             btnSua.Enabled = false; //vô hiệu hóa nút sửa
             btnHuyHD.Enabled = false; //vô hiệu hóa nút hủy
             load_data(); //gọi phương thức load_data() để chạy lại dữ liệu
-            btnXuathop.Enabled = false;
+            btnXuathopdong.Enabled = false;
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
@@ -274,7 +275,7 @@ namespace BTL_dotNET.Forms
                 resetvalues(); //gọi phương thức resetvalues() để làm mới giá trị trên form
                 btnSua.Enabled = false; //vô hiệu hóa nút sửa
                 btnLammoi.Enabled = false; //vô hiệu hóa nút làm mới 
-                btnXuathop.Enabled = false; //vô hiệu hóa nút xuất hợp đồng
+                btnXuathopdong.Enabled = false; //vô hiệu hóa nút xuất hợp đồng
                 btnHuyHD.Enabled = false; //vô hiệu hóa nút hủy
             }
         }
@@ -324,8 +325,245 @@ namespace BTL_dotNET.Forms
             resetvalues(); //gọi phương thức resetvalues() để làm mới giá trị trên form
             btnSua.Enabled = false; //vô hiệu hóa nút sửa
             btnHuyHD.Enabled = false; //vô hiệu hóa nút hủy
-            btnXuathop.Enabled = false; //vô hiệu hóa nút xuất hợp đồng 
+            btnXuathopdong.Enabled = false; //vô hiệu hóa nút xuất hợp đồng 
             btnLammoi.Enabled = false; //vô hiệu hóa nút làm mới
+        }
+
+        private void btnXuathopdong_Click(object sender, EventArgs e)
+        {
+            string sql;
+            sql = "select tongtien from (select coalesce(sum(nhuanbut),0) as tongtien,a.mavb as mahd from vietbai a full join chitietvietbai b on a.mavb=b.mavb group by a.mavb " +
+                "union " +
+                "select coalesce(sum(dongia * abs(datediff(day,ngaykt,ngaybd))),0) as tongtien, a.maqc as mahd " +
+                "from quangcao a full join chitietquangcao b on a.maqc=b.maqc group by a.maqc) a where mahd='" + txtMahopdong.Text + "'";
+            if (Class.Functions.GetFieldValues(sql) == "0")
+            {
+                MessageBox.Show("Hợp đồng chưa có nội dung, hãy ấn đúp vào hợp đồng " + txtMahopdong.Text + " để thêm nội dung", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            COMExcel.Application exApp = new COMExcel.Application();
+            COMExcel.Workbook exBook;
+            COMExcel.Worksheet exSheet;
+            COMExcel.Range exRange;
+            int row = 0, col = 0;
+            DataTable tblhd, tblctqc, tblctvb;
+            exBook = exApp.Workbooks.Add(COMExcel.XlWBATemplate.xlWBATWorksheet);
+            exSheet = (COMExcel.Worksheet)exBook.Worksheets[1];
+            exRange = (COMExcel.Range)exSheet.Cells[1, 1];
+
+            exRange.Range["A1:H1"].MergeCells = true;
+            exRange.Range["A1:H1"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            exRange.Range["A1:H1"].Value = "Cộng hòa xã hội chủ nghĩa Việt Nam";
+
+            exRange.Range["A2:H2"].MergeCells = true;
+            exRange.Range["A2:H2"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            exRange.Range["A2:H2"].Value = "Độc lập - Tự do - Hạnh phúc";
+
+            exRange.Range["A3:H3"].MergeCells = true;
+            exRange.Range["A3:H3"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            exRange.Range["A3:H3"].Value = "------------------------------------------";
+
+            exRange.Range["A7:H7"].MergeCells = true;
+            exRange.Range["A7:H7"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            if (txtMahopdong.Text.Substring(0, 2) == "VB")
+            {
+                exRange.Range["A7:H7"].Value = "HỢP ĐỒNG VIẾT BÀI";
+            }
+            else
+            {
+                exRange.Range["A7:H7"].Value = "HỢP ĐỒNG QUẢNG CÁO";
+            }
+
+            sql = "select * from (" +
+                "select a.mavb as mahd,chucvu,c.dienthoai,ngayky,coalesce(sum(nhuanbut),0) as tongtien " +
+                "from vietbai a full join chitietvietbai b on a.mavb=b.mavb join nhanvien c on c.manv = a.manv join chucvu d on d.macv = c.macv " +
+                "group by a.mavb,a.manv,makh,ngayky,tennv,chucvu,c.dienthoai " +
+                "union " +
+                "select a.maqc as mahd,chucvu,c.dienthoai,ngayky,coalesce(sum(dongia * abs(datediff(day,ngaykt,ngaybd))),0) as tongtien " +
+                "from quangcao a full join chitietquangcao b on a.maqc=b.maqc join nhanvien c on c.manv = a.manv join chucvu d on d.macv = c.macv " +
+                "group by a.maqc,a.manv,makh,ngayky,tennv,chucvu,c.dienthoai) a where mahd ='" + txtMahopdong.Text + "'";
+            tblhd = Class.Functions.GetDataToTable(sql);
+            exRange.Range["A8:H8"].MergeCells = true;
+            exRange.Range["A8:H8"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            exRange.Range["A8:H8"].Value = "Số: " + tblhd.Rows[0][0].ToString();
+
+            exRange.Range["A9:H9"].MergeCells = true;
+            exRange.Range["A9:H9"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A9:H9"].Value = "Căn cứ Bộ Luật Dân Sự được Quốc hội nước Cộng hòa xã hội chủ nghĩa Việt Nam thông qua ngày 24 tháng 11 năm 2015";
+            exRange.Range["A9:H9"].WrapText = true;
+
+            exRange.Range["A10:H10"].MergeCells = true;
+            exRange.Range["A10:H10"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A10:H10"].Value = "Căn cứ Luật Thương mại 2015";
+
+            exRange.Range["A11:H11"].MergeCells = true;
+            exRange.Range["A11:H11"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A11:H11"].Value = "Căn cứ Luật Quảng cáo 2012";
+
+            exRange.Range["A12:H12"].MergeCells = true;
+            exRange.Range["A12:H12"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A12:H12"].Value = "Căn cứ nhu cầu và khả năng của hai bên:";
+
+            exRange.Range["A13:H13"].MergeCells = true;
+            exRange.Range["A13:H13"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            DateTime d = Convert.ToDateTime(tblhd.Rows[0][3].ToString());
+            exRange.Range["A13:H13"].Value = "Hôm nay, ngày " + d.Day + " tháng " + d.Month + " năm " + d.Year;
+
+            exRange.Range["A14:H14"].MergeCells = true;
+            exRange.Range["A14:H14"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A14:H14"].Value = "BÊN A:";
+            exRange.Range["A14:H14"].Font.Bold = true;
+
+            exRange.Range["A15:H15"].MergeCells = true;
+            exRange.Range["A15:H15"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A15:H15"].Value = "Ông/bà: " + txtTenkhachhang.Text;
+
+            exRange.Range["A16:H16"].MergeCells = true;
+            exRange.Range["A16:H16"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A16:H16"].Value = "Địa chỉ: " + txtDiachi.Text;
+
+            exRange.Range["A17:H17"].MergeCells = true;
+            exRange.Range["A17:H17"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A17:H17"].Value = "Số điện thoại: " + mskDienthoai.Text;
+
+            exRange.Range["A18:H18"].MergeCells = true;
+            exRange.Range["A18:H18"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A18:H18"].Value = "BÊN B:";
+            exRange.Range["A18:H18"].Font.Bold = true;
+
+            exRange.Range["A19:H19"].MergeCells = true;
+            exRange.Range["A19:H19"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A19:H19"].Value = "Ông/bà: " + txtTennhanvien.Text;
+
+            exRange.Range["A20:H20"].MergeCells = true;
+            exRange.Range["A20:H20"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A20:H20"].Value = "Số điện thoại: " + tblhd.Rows[0][2];
+
+            exRange.Range["A21:H21"].MergeCells = true;
+            exRange.Range["A21:H21"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A21:H21"].Value = "Chức vụ: " + tblhd.Rows[0][1];
+
+            exRange.Range["A22:H22"].MergeCells = true;
+            exRange.Range["A22:H22"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A22:H22"].Value = "Sau khi bàn bạc, thỏa thuận các bên thống nhất các nội dung sau:";
+
+            exRange.Range["A25:H25"].MergeCells = true;
+            exRange.Range["A25:H25"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A25:H25"].Value = "Bên A chịu trách nhiệm đưa ra ý tưởng kịch bản và các thông tin cần viết bài cho Bên B";
+
+            exRange.Range["A26:H26"].MergeCells = true;
+            exRange.Range["A26:H26"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A26:H26"].Value = "Bên B chịu trách nhiệm đưa thông tin của Bên A dưới hình thức viết bài:";
+
+            exRange.Range["A27:H27"].Font.Bold = true;
+            exRange.Range["A27:H27"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            exRange.Range["D27:H27"].ColumnWidth = 12;
+            if (txtMahopdong.Text.Substring(0, 2) == "VB")
+            {
+                sql = "select mabao,matheloai,tieude,noidung,ngaydang,nhuanbut from chitietvietbai where mavb = '" + txtMahopdong.Text + "'";
+                tblctvb = Class.Functions.GetDataToTable(sql);
+                exRange.Range["A27:A27"].Value = "STT";
+                exRange.Range["B27:B27"].Value = "Báo";
+                exRange.Range["C27:C27"].Value = "Thể loại";
+                exRange.Range["D27:D27"].Value = "Tiêu đề";
+                exRange.Range["E27:E27"].Value = "Nội dung";
+                exRange.Range["F27:F27"].Value = "Ngày đăng";
+                exRange.Range["G27:G27"].Value = "Nhuận bút";
+                for (row = 0; row <= tblctvb.Rows.Count - 1; row++)
+                {
+                    exSheet.Cells[row + 28, 1] = row + 1; //điền số thứ tự vào ô đầu tiên trong mỗi hàng
+                    for (col = 0; col <= tblctvb.Columns.Count - 1; col++)
+                    {
+                        if (tblctvb.Columns[col].ColumnName == "ngaydang")
+                        {
+                            exSheet.Cells[row + 28, col + 2] = Convert.ToDateTime(tblctvb.Rows[row]["ngaydang"]);
+                        }
+                        else
+                        {
+                            exSheet.Cells[row + 28, col + 2] = tblctvb.Rows[row][col].ToString();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                sql = "select madv,mabao,ngaybd,ngaykt,dongia,(dongia * abs(datediff(day,ngaykt,ngaybd))) as thanhtien,noidung from chitietquangcao where maqc = '" + txtMahopdong.Text + "'";
+                tblctqc = Class.Functions.GetDataToTable(sql);
+                exRange.Range["A27:A27"].Value = "STT";
+                exRange.Range["B27:B27"].Value = "Dịch vụ";
+                exRange.Range["C27:C27"].Value = "Báo";
+                exRange.Range["D27:D27"].Value = "Ngày bắt đầu";
+                exRange.Range["E27:E27"].Value = "Ngày kết thúc ";
+                exRange.Range["F27:F27"].Value = "Đơn giá";
+                exRange.Range["G27:G27"].Value = "Thành tiền";
+                exRange.Range["H27:H27"].Value = "Nội dung";
+                for (row = 0; row <= tblctqc.Rows.Count - 1; row++)
+                {
+                    exSheet.Cells[row + 28, 1] = row + 1; //điền số thứ tự vào ô đầu tiên trong mỗi hàng
+                    for (col = 0; col <= tblctqc.Columns.Count - 1; col++)
+                    {
+                        if (tblctqc.Columns[col].ColumnName == "ngaybd")
+                        {
+                            exSheet.Cells[row + 28, col + 2] = Convert.ToDateTime(tblctqc.Rows[row]["ngaybd"]);
+                        }
+                        else if (tblctqc.Columns[col].ColumnName == "ngaykt")
+                        {
+                            exSheet.Cells[row + 28, col + 2] = Convert.ToDateTime(tblctqc.Rows[row]["ngaykt"]);
+                        }
+                        else
+                        {
+                            exSheet.Cells[row + 28, col + 2] = tblctqc.Rows[row][col].ToString();
+                        }
+                    }
+                }
+            }
+
+            exRange = (COMExcel.Range)exSheet.Cells[row + 29, 1];
+            exRange.Range["A1:H1"].MergeCells = true;
+            exRange.Range["A1:H1"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A1:H1"].Value = "ĐIỀU 2: GIÁ TRỊ HỢP ĐỒNG";
+            exRange.Range["A1:H1"].Font.Bold = true;
+
+            exRange = (COMExcel.Range)exSheet.Cells[row + 30, 1];
+            exRange.Range["A1:H1"].MergeCells = true;
+            exRange.Range["A1:H1"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A1:H1"].Value = "Chi phí cho việc thực hiện nội dung công việc tại Điều 1 của hợp đồng này là: " + tblhd.Rows[0][4].ToString() +
+                " (Bằng chữ: " + Class.Functions.ConvertNumberToString(tblhd.Rows[0][4].ToString()) + ")"; ;
+            exRange.Range["A1:H1"].WrapText = true;
+
+            exRange = (COMExcel.Range)exSheet.Cells[row + 31, 1];
+            exRange.Range["A1:H1"].MergeCells = true;
+            exRange.Range["A1:H1"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignLeft;
+            exRange.Range["A1:H1"].Value = "ĐIỀU 3: Bên A phải trả tiền đầy đủ cho bên B 01 (một) lần bằng tiền mặt và bên A phải cấp cho bên B hợp đồng đẩy đủ để có cơ sở thanh toán chi phí cho đợt quảng cáo";
+            exRange.Range["A1:H1"].Font.Bold = true;
+            exRange.Range["A1:H1"].WrapText = true;
+
+            exRange = (COMExcel.Range)exSheet.Cells[row + 32, 1];
+            exRange.Range["A1:C1"].MergeCells = true;
+            exRange.Range["A1:C1"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            exRange.Range["A1:C1"].Value = "ĐẠI DIỆN BÊN A";
+            exRange.Range["A1:C1"].Font.Bold = true;
+            exRange.Range["A2:C2"].MergeCells = true;
+            exRange.Range["A2:C2"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            string[] Name_KH = txtTenkhachhang.Text.Split(" ");
+            exRange.Range["A2:C2"].Value = Name_KH[2];
+            exRange.Range["A3:C3"].MergeCells = true;
+            exRange.Range["A3:C3"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            exRange.Range["A3:C3"].Value = txtTenkhachhang.Text;
+
+            exRange = (COMExcel.Range)exSheet.Cells[row + 32, 6];
+            exRange.Range["A1:C1"].MergeCells = true;
+            exRange.Range["A1:C1"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            exRange.Range["A1:C1"].Value = "ĐẠI DIỆN BÊN B";
+            exRange.Range["A1:C1"].Font.Bold = true;
+            exRange.Range["A2:C2"].MergeCells = true;
+            exRange.Range["A2:C2"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            string[] Name_NV = txtTennhanvien.Text.Split(" ");
+            exRange.Range["A2:C2"].Value = Name_NV[2];
+            exRange.Range["A3:C3"].MergeCells = true;
+            exRange.Range["A3:C3"].HorizontalAlignment = COMExcel.XlHAlign.xlHAlignCenter;
+            exRange.Range["A3:C3"].Value = txtTennhanvien.Text;
+            exApp.Visible = true;
         }
     }
 }

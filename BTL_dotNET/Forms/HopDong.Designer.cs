@@ -45,7 +45,7 @@
             btnLuu = new Button();
             btnLammoi = new Button();
             btnTimkiem = new Button();
-            btnXuathop = new Button();
+            btnXuathopdong = new Button();
             btnDong = new Button();
             DataGridView = new DataGridView();
             txtMahopdong = new TextBox();
@@ -220,14 +220,15 @@
             btnTimkiem.Text = "Tìm kiếm";
             btnTimkiem.UseVisualStyleBackColor = true;
             // 
-            // btnXuathop
+            // btnXuathopdong
             // 
-            btnXuathop.Location = new Point(723, 501);
-            btnXuathop.Name = "btnXuathop";
-            btnXuathop.Size = new Size(94, 29);
-            btnXuathop.TabIndex = 17;
-            btnXuathop.Text = "Xuất hợp đồng";
-            btnXuathop.UseVisualStyleBackColor = true;
+            btnXuathopdong.Location = new Point(677, 501);
+            btnXuathopdong.Name = "btnXuathopdong";
+            btnXuathopdong.Size = new Size(140, 29);
+            btnXuathopdong.TabIndex = 17;
+            btnXuathopdong.Text = "Xuất hợp đồng";
+            btnXuathopdong.UseVisualStyleBackColor = true;
+            btnXuathopdong.Click += btnXuathopdong_Click;
             // 
             // btnDong
             // 
@@ -338,7 +339,7 @@
             Controls.Add(txtMahopdong);
             Controls.Add(DataGridView);
             Controls.Add(btnDong);
-            Controls.Add(btnXuathop);
+            Controls.Add(btnXuathopdong);
             Controls.Add(btnTimkiem);
             Controls.Add(btnLammoi);
             Controls.Add(btnLuu);
@@ -383,7 +384,7 @@
         private Button btnLuu;
         private Button btnLammoi;
         private Button btnTimkiem;
-        private Button btnXuathop;
+        private Button btnXuathopdong;
         private Button btnDong;
         private DataGridView DataGridView;
         private TextBox txtMahopdong;

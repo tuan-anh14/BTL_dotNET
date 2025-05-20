@@ -184,5 +184,85 @@ namespace BTL_dotNET.Class
             return dt;
         }
 
+        public static string ConvertNumberToString(string number)
+        {
+            int mLen, mDigit;
+            string mTemp = "";
+            string[] mNumText;
+            number = number.Replace(",", "");
+            mNumText = "không;một;hai;ba;bốn;năm;sáu;bảy;tám;chín".Split(";");
+            mLen = number.Length - 1;
+            for (int i = 0; i <= mLen; i++)
+            {
+                mDigit = Convert.ToInt32(number.Substring(i, 1));
+                mTemp = mTemp + " " + mNumText[mDigit];
+                if (mLen == 1)
+                {
+                    break;
+                }
+                switch ((mLen - i) % 9)
+                {
+                    case 0:
+                        mTemp = mTemp + " tỷ";
+                        if (number.Substring(i + 1, 3) == "000")
+                        {
+                            i = i + 3;
+                        }
+                        if (number.Substring(i + 1, 3) == "000")
+                        {
+                            i = i + 3;
+                        }
+                        if (number.Substring(i + 1, 3) == "000")
+                        {
+                            i = i + 3;
+                        }
+                        break;
+                    case 6:
+                        mTemp = mTemp + " triệu";
+                        if (number.Substring(i + 1, 3) == "000")
+                        {
+                            i = i + 3;
+                        }
+                        if (number.Substring(i + 1, 3) == "000")
+                        {
+                            i = i + 3;
+                        }
+                        break;
+                    case 3:
+                        mTemp = mTemp + " nghìn";
+                        if (number.Substring(i + 1, 3) == "000")
+                        {
+                            i = i + 3;
+                        }
+                        break;
+                    default:
+                        switch ((mLen - i) % 3)
+                        {
+                            case 2:
+                                mTemp = mTemp + " trăm";
+                                break;
+                            case 1:
+                                mTemp = mTemp + " mươi";
+                                break;
+                        }
+                        break;
+                }
+            }
+            mTemp = mTemp.Replace("không mươi không ", "");
+            mTemp = mTemp.Replace("không mươi không", "");
+            mTemp = mTemp.Replace("không mươi ", "linh ");
+            mTemp = mTemp.Replace("mươi không", "mươi");
+            mTemp = mTemp.Replace("một mươi", "mười");
+            mTemp = mTemp.Replace("không mươi không ", "");
+            mTemp = mTemp.Replace("mươi bốn", "mươi tư");
+            mTemp = mTemp.Replace("linh bốn", "linh tư");
+            mTemp = mTemp.Replace("mươi năm", "mươi lăm");
+            mTemp = mTemp.Replace("mươi một", "mươi mốt");
+            mTemp = mTemp.Replace("mười năm", "mười lăm");
+            mTemp = mTemp.Trim();
+            mTemp = mTemp.Substring(0, 1).ToUpper() + mTemp.Substring(1) + " đồng";
+            return mTemp;
+        }
+
     }
 }
