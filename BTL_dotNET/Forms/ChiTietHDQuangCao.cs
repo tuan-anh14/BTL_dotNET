@@ -17,6 +17,12 @@ namespace BTL_dotNET.Forms
             InitializeComponent();
         }
 
+        string maqc;
+        public void GetValue(string value)
+        {
+            maqc = value;
+        }
+
         private void ChiTietHDQuangCao_Load(object sender, EventArgs e)
         {
 

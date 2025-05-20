@@ -17,7 +17,18 @@ namespace BTL_dotNET.Forms
             InitializeComponent();
         }
 
+        string mavb;
+        public void GetValue(string value)
+        {
+            mavb = value;
+        }
+
         private void lblchitiethopdong_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ChiTietHDVietBai_Load(object sender, EventArgs e)
         {
 
         }

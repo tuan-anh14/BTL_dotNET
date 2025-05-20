@@ -335,6 +335,7 @@
             Controls.Add(DataGridView);
             Name = "ChiTietHDVietBai";
             Text = "ChiTietHDVietBai";
+            Load += ChiTietHDVietBai_Load;
             ((System.ComponentModel.ISupportInitialize)DataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

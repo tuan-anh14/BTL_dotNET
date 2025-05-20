@@ -50,7 +50,6 @@
             cboMabao = new ComboBox();
             cboMadichvu = new ComboBox();
             txtMaCTQC = new TextBox();
-            textBox2 = new TextBox();
             txtDichvu = new TextBox();
             txtTenbao = new TextBox();
             txtDongia = new TextBox();
@@ -257,13 +256,6 @@
             txtMaCTQC.Size = new Size(125, 27);
             txtMaCTQC.TabIndex = 20;
             // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(473, 266);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(125, 27);
-            textBox2.TabIndex = 21;
-            // 
             // txtDichvu
             // 
             txtDichvu.Location = new Point(375, 90);
@@ -339,7 +331,6 @@
             Controls.Add(txtDongia);
             Controls.Add(txtTenbao);
             Controls.Add(txtDichvu);
-            Controls.Add(textBox2);
             Controls.Add(txtMaCTQC);
             Controls.Add(cboMadichvu);
             Controls.Add(cboMabao);
@@ -394,7 +385,6 @@
         private ComboBox cboMabao;
         private ComboBox cboMadichvu;
         private TextBox txtMaCTQC;
-        private TextBox textBox2;
         private TextBox txtDichvu;
         private TextBox txtTenbao;
         private TextBox txtDongia;

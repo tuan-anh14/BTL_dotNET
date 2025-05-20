@@ -47,5 +47,20 @@ namespace BTL_dotNET.Class
             cbo.DisplayMember = ten;
         }
 
+        public static string GetFieldValues(string sql)
+        {
+            string ma = "";
+            SqlCommand cmd = new SqlCommand(sql, Functions.conn);
+            SqlDataReader reader;
+            reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ma = reader.GetValue(0).ToString();
+            }
+            reader.Close();
+            return ma;
+
+        }
+
     }
 }

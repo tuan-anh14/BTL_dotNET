@@ -88,9 +88,56 @@ namespace BTL_dotNET.Forms
             DataGridView.EditMode = DataGridViewEditMode.EditProgrammatically;
         }
 
+        private void DataGridView_Click(object sender, EventArgs e)
+        {
+            if (tblhopdong.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu trong bảng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (btnThemHDQuangcao.Enabled == false || btnThemHDVietbai.Enabled == false)
+            {
+                MessageBox.Show("Đang ở chế độ thêm mới!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            txtMahopdong.Text = DataGridView.CurrentRow.Cells["mahd"].Value.ToString();
+            mskNgayky.Text = Class.Functions.GetFieldValues("select ngayky from (select maqc as mahd ,ngayky from quangcao union select mavb as mahd,ngayky from vietbai) a" +
+                " where mahd = '" + txtMahopdong.Text + "'");
+            string manv, makh;
+            manv = Class.Functions.GetFieldValues("select manv from (select maqc as mahd ,ngayky,manv,makh from quangcao union select mavb as mahd,ngayky,manv,makh from vietbai) a" +
+                " where mahd = '" + txtMahopdong.Text + "'");
+            cboManhanvien.Text = Class.Functions.GetFieldValues("select manv from nhanvien where manv = '" + manv + "'");
+            makh = Class.Functions.GetFieldValues("select makh from (select maqc as mahd ,ngayky,manv,makh from quangcao union select mavb as mahd,ngayky,manv,makh from vietbai) a" +
+                " where mahd = '" + txtMahopdong.Text + "'");
+            cboMakhachhang.Text = Class.Functions.GetFieldValues("select makh from khachhang where makh = '" + makh + "'");
+            btnSua.Enabled = true;
+            btnHuyHD.Enabled = true;
+            btnLammoi.Enabled = true;
+            btnXuathop.Enabled = true;
+        }
+
         private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            
         }
+
+        private void DataGridView_DoubleClick(object sender, EventArgs e)
+        {
+            ChiTietHDVietBai a = new ChiTietHDVietBai(); //khởi tạo đối tượng ChiTietHDVietBai (chi tiết hợp đồng viết bài)
+            ChiTietHDQuangCao b = new ChiTietHDQuangCao(); //khởi tạo đối tượng ChiTietHDQuangCao (chi tiết hợp đồng quảng cáo)
+            if (txtMahopdong.Text.Substring(0, 2) == "VB") //kiểm tra tiền tố mã hợp đồng
+            {
+                a.GetValue(txtMahopdong.Text); //gọi phương thức GetValue từ ChiTietHDVietBai
+                a.StartPosition = FormStartPosition.CenterScreen; //hiển thị form ở chính giữa màn hình
+                a.ShowDialog(this);//hiển thị form a
+            }
+            else
+            {
+                b.GetValue(txtMahopdong.Text); //gọi phương thức GetValue từ ChiTietHDQuangCao
+                b.StartPosition = FormStartPosition.CenterScreen; //hiển thị form ở chính giữa màn hình
+                b.ShowDialog(this); //hiển thị form a
+            }
+        }
+
     }
 }
