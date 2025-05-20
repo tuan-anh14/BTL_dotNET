@@ -79,6 +79,15 @@ namespace BTL_dotNET.Class
             cbo.DisplayMember = ten;
         }
 
+        public static int DateDiff(string date1, string date2)
+        {
+            DateTime dt1 = DateTime.ParseExact(date1, "dd/MM/yyyy", null);
+            DateTime dt2 = DateTime.ParseExact(date2, "dd/MM/yyyy", null);
+            TimeSpan diff = dt2 - dt1;
+            int result = diff.Days;
+            return result;
+        }
+
         public static string GetFieldValues(string sql)
         {
             string ma = "";
