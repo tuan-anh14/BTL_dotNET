@@ -40,7 +40,7 @@
             lblMaCTQC = new Label();
             lblBangchu = new Label();
             lblTongtien = new Label();
-            dataGridView = new DataGridView();
+            DataGridView = new DataGridView();
             btnThemdichvu = new Button();
             btnCapnhat = new Button();
             btnBoqua = new Button();
@@ -58,7 +58,7 @@
             txtTongtien = new TextBox();
             mskNgaybatdau = new MaskedTextBox();
             mskNgayketthuc = new MaskedTextBox();
-            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DataGridView).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -170,14 +170,15 @@
             lblTongtien.TabIndex = 11;
             lblTongtien.Text = "Tổng tiền";
             // 
-            // dataGridView
+            // DataGridView
             // 
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.Location = new Point(45, 226);
-            dataGridView.Name = "dataGridView";
-            dataGridView.RowHeadersWidth = 51;
-            dataGridView.Size = new Size(948, 226);
-            dataGridView.TabIndex = 12;
+            DataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DataGridView.Location = new Point(45, 226);
+            DataGridView.Name = "DataGridView";
+            DataGridView.RowHeadersWidth = 51;
+            DataGridView.Size = new Size(948, 226);
+            DataGridView.TabIndex = 12;
+            DataGridView.CellContentClick += DataGridView_CellContentClick;
             // 
             // btnThemdichvu
             // 
@@ -340,7 +341,7 @@
             Controls.Add(btnBoqua);
             Controls.Add(btnCapnhat);
             Controls.Add(btnThemdichvu);
-            Controls.Add(dataGridView);
+            Controls.Add(DataGridView);
             Controls.Add(lblTongtien);
             Controls.Add(lblBangchu);
             Controls.Add(lblMaCTQC);
@@ -356,7 +357,7 @@
             Name = "ChiTietHDQuangCao";
             Text = "ChiTietHDQuangCao";
             Load += ChiTietHDQuangCao_Load;
-            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -375,7 +376,7 @@
         private Label lblMaCTQC;
         private Label lblBangchu;
         private Label lblTongtien;
-        private DataGridView dataGridView;
+        private DataGridView DataGridView;
         private Button btnThemdichvu;
         private Button btnCapnhat;
         private Button btnBoqua;
