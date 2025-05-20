@@ -159,6 +159,7 @@
             btnThemHDQuangcao.TabIndex = 10;
             btnThemHDQuangcao.Text = "Thêm HĐ Quảng Cáo";
             btnThemHDQuangcao.UseVisualStyleBackColor = true;
+            btnThemHDQuangcao.Click += btnThemHDQuangcao_Click;
             // 
             // btnThemHDVietbai
             // 
@@ -168,6 +169,7 @@
             btnThemHDVietbai.TabIndex = 11;
             btnThemHDVietbai.Text = "Thêm HĐ Viết Bài";
             btnThemHDVietbai.UseVisualStyleBackColor = true;
+            btnThemHDVietbai.Click += btnThemHDVietbai_Click;
             // 
             // btnHuyHD
             // 
@@ -177,6 +179,7 @@
             btnHuyHD.TabIndex = 12;
             btnHuyHD.Text = "Huỷ HĐ";
             btnHuyHD.UseVisualStyleBackColor = true;
+            btnHuyHD.Click += btnHuyHD_Click;
             // 
             // btnSua
             // 
@@ -186,6 +189,7 @@
             btnSua.TabIndex = 13;
             btnSua.Text = "Sửa";
             btnSua.UseVisualStyleBackColor = true;
+            btnSua.Click += btnSua_Click;
             // 
             // btnLuu
             // 
@@ -195,6 +199,7 @@
             btnLuu.TabIndex = 14;
             btnLuu.Text = "Lưu";
             btnLuu.UseVisualStyleBackColor = true;
+            btnLuu.Click += btnLuu_Click;
             // 
             // btnLammoi
             // 
@@ -204,6 +209,7 @@
             btnLammoi.TabIndex = 15;
             btnLammoi.Text = "Làm mới";
             btnLammoi.UseVisualStyleBackColor = true;
+            btnLammoi.Click += btnLammoi_Click;
             // 
             // btnTimkiem
             // 

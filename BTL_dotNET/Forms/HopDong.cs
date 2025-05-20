@@ -167,6 +167,165 @@ namespace BTL_dotNET.Forms
             }
         }
 
+        private void btnThemHDQuangcao_Click(object sender, EventArgs e)
+        {
+            btnThemHDQuangcao.Enabled = false;
+            btnThemHDVietbai.Enabled = false;
+            btnLammoi.Enabled = true;
+            btnLuu.Enabled = true;
+            resetvalues();
+            btnSua.Enabled = false;
+            btnHuyHD.Enabled = false;
+            txtMahopdong.Text = Class.Functions.CreateKey("QC");
+        }
 
+        private void btnThemHDVietbai_Click(object sender, EventArgs e)
+        {
+            btnThemHDVietbai.Enabled = false;
+            btnThemHDQuangcao.Enabled = false;
+            btnLammoi.Enabled = true;
+            btnLuu.Enabled = true;
+            resetvalues();
+            btnSua.Enabled = false;
+            btnHuyHD.Enabled = false;
+            txtMahopdong.Text = Class.Functions.CreateKey("VB");
+        }
+
+        private void btnLammoi_Click(object sender, EventArgs e)
+        {
+            btnLammoi.Enabled = false; //vô hiệu hóa nút làm mới
+            resetvalues(); //gọi phương thức resetvalues() để làm mới giá trị trên form
+            btnThemHDQuangcao.Enabled = true; //kích hoạt nút thêm hợp đồng quảng cáo
+            btnThemHDVietbai.Enabled = true; //kích hoạt nút thêm hợp đồng viết bài
+            btnLuu.Enabled = false; //vô hiệu hóa nút lưu
+            btnSua.Enabled = false; //vô hiệu hóa nút sửa
+            btnHuyHD.Enabled = false; //vô hiệu hóa nút hủy
+            load_data(); //gọi phương thức load_data() để chạy lại dữ liệu
+            btnXuathop.Enabled = false;
+        }
+
+        private void btnLuu_Click(object sender, EventArgs e)
+        {
+            if (mskNgayky.Text == "  /  /")
+            {
+                MessageBox.Show("Bạn chưa nhập ngày ký!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayky.Focus();
+                return;
+            }
+            if (!Class.Functions.Isdate(mskNgayky.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày ký, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayky.Focus();
+                mskNgayky.Text = "";
+                return;
+            }
+            if (cboManhanvien.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa chọn nhân viên!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboManhanvien.Focus();
+                return;
+            }
+            if (cboMakhachhang.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa chọn khách hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboMakhachhang.Focus();
+                return;
+            }
+            string sql;
+            if (txtMahopdong.Text.Substring(0, 2) == "VB") //kiểm tra tiền tố mã hợp đồng
+            {
+                sql = "insert into vietbai (mavb,manv,makh,ngayky) values ('" + txtMahopdong.Text + "','" +
+                cboManhanvien.SelectedValue.ToString() + "','" +
+                cboMakhachhang.SelectedValue.ToString() + "','" +
+                Class.Functions.ConvertDate(mskNgayky.Text) + "')";
+            }
+            else
+            {
+                sql = "insert into quangcao (maqc,manv,makh,ngayky) values ('" + txtMahopdong.Text + "','" +
+                cboManhanvien.SelectedValue.ToString() + "','" +
+                cboMakhachhang.SelectedValue.ToString() + "','" +
+                Class.Functions.ConvertDate(mskNgayky.Text) + "')";
+            }
+            Class.Functions.Runsql(sql); //gọi phương thức Runsql từ Class Functions để thực hiện lệnh sql
+            load_data(); //gọi phương thức load_data() để chạy lại dữ liệu
+            resetvalues(); //gọi phương thức resetvalues() để làm mới giá trị trên form
+            btnLuu.Enabled = false; //vô hiệu hóa nút lưu
+            btnThemHDVietbai.Enabled = true; //kích hoạt nút thêm hợp đồng viết bài
+            btnThemHDQuangcao.Enabled = true; //kích hoạt nút thêm hợp đồng quảng cáo
+            btnLammoi.Enabled = false; //vô hiệu hóa nút làm mới
+        }
+
+        private void btnHuyHD_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Bạn chắc chắn muốn xóa hợp đồng " + txtMahopdong.Text + " khỏi bảng?", "Thông báo",
+            MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                string sql;
+                if (txtMahopdong.Text.Substring(0, 2) == "VB") //kiểm tra tiền tố mã hợp đồng
+                {
+                    sql = "delete from vietbai where mavb ='" + txtMahopdong.Text + "'";
+                }
+                else
+                {
+                    sql = "delete from quangcao where maqc ='" + txtMahopdong.Text + "'";
+                }
+                Class.Functions.Runsqldel(sql); //gọi phương thức Runsqldel từ Class Functions để thực hiện lệnh sql
+                load_data(); //gọi phương thức load_data() để chạy lại dữ liệu
+                resetvalues(); //gọi phương thức resetvalues() để làm mới giá trị trên form
+                btnSua.Enabled = false; //vô hiệu hóa nút sửa
+                btnLammoi.Enabled = false; //vô hiệu hóa nút làm mới 
+                btnXuathop.Enabled = false; //vô hiệu hóa nút xuất hợp đồng
+                btnHuyHD.Enabled = false; //vô hiệu hóa nút hủy
+            }
+        }
+
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            if (mskNgayky.Text == "  /  /")
+            {
+                MessageBox.Show("Bạn chưa nhập ngày ký!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayky.Focus();
+                return;
+            }
+            if (!Class.Functions.Isdate(mskNgayky.Text))
+            {
+                MessageBox.Show("Sai định dạng ngày ký, hãy nhập lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mskNgayky.Focus();
+                mskNgayky.Text = "";
+                return;
+            }
+            if (cboManhanvien.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa chọn nhân viên!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboManhanvien.Focus();
+                return;
+            }
+            if (cboMakhachhang.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Bạn chưa chọn khách hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboMakhachhang.Focus();
+                return;
+            }
+            string sql;
+            if (txtMahopdong.Text.Substring(0, 2) == "VB") //kiểm tra tiền tố mã hợp đồng
+            {
+                sql = "update vietbai set ngayky = '" + Class.Functions.ConvertDate(mskNgayky.Text)
+                + "', manv ='" + cboManhanvien.SelectedValue
+                + "', makh ='" + cboMakhachhang.SelectedValue + "' where mavb ='" + txtMahopdong.Text + "'";
+            }
+            else
+            {
+                sql = "update quangcao set ngayky = '" + Class.Functions.ConvertDate(mskNgayky.Text)
+                + "', manv ='" + cboManhanvien.SelectedValue
+                + "', makh ='" + cboMakhachhang.SelectedValue + "' where maqc ='" + txtMahopdong.Text + "'";
+            }
+            Class.Functions.Runsql(sql); //gọi phương thức Runsql từ Class Functions để thực hiện lệnh sql
+            load_data(); //gọi phương thức load_data() để chạy lại dữ liệu
+            resetvalues(); //gọi phương thức resetvalues() để làm mới giá trị trên form
+            btnSua.Enabled = false; //vô hiệu hóa nút sửa
+            btnHuyHD.Enabled = false; //vô hiệu hóa nút hủy
+            btnXuathop.Enabled = false; //vô hiệu hóa nút xuất hợp đồng 
+            btnLammoi.Enabled = false; //vô hiệu hóa nút làm mới
+        }
     }
 }

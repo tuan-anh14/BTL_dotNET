@@ -28,6 +28,38 @@ namespace BTL_dotNET.Class
             }
         }
 
+        public static void Runsql(string sql)
+        {
+            SqlCommand cmd;
+            cmd = new SqlCommand(sql, Functions.conn);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            cmd.Dispose();
+            cmd = null;
+        }
+
+        public static void Runsqldel(string sql)
+        {
+            SqlCommand cmd;
+            cmd = new SqlCommand(sql, Functions.conn);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Dữ liệu đang được sử dụng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            cmd.Dispose();
+            cmd = null;
+        }
+
         public static DataTable GetDataToTable(string sql)
         {
             SqlDataAdapter mydata = new SqlDataAdapter();
@@ -60,6 +92,96 @@ namespace BTL_dotNET.Class
             reader.Close();
             return ma;
 
+        }
+
+        public static string CreateKey(string tiento)
+        {
+            string key = tiento;
+            string[] partsdate;
+            partsdate = DateTime.Now.ToShortDateString().Split('/');
+            string d = String.Format("{0}{1}{2}", partsdate[0], partsdate[1], partsdate[2]);
+            key = key + d;
+            string[] partsTime;
+            partsTime = DateTime.Now.ToLongTimeString().Split(":");
+            if (partsTime[2].Substring(3, 2) == "PM")
+            {
+                partsTime[0] = ConvertTimeTo24(partsTime[0]);
+            }
+            if (partsTime[2].Substring(3, 2) == "AM")
+            {
+                if (partsTime[0].Length == 1)
+                {
+                    partsTime[0] = "0" + partsTime[0];
+                }
+            }
+            partsTime[2] = partsTime[2].Remove(2, 3);
+            string t;
+            t = String.Format("{0}{1}{2}", partsTime[0], partsTime[1], partsTime[2]);
+            key = key + "_" + t;
+            return key;
+        }
+
+        public static string ConvertTimeTo24(string hour)
+        {
+            string h = "";
+            switch (hour)
+            {
+                case "1":
+                    h = "13";
+                    break;
+                case "2":
+                    h = "14";
+                    break;
+                case "3":
+                    h = "15";
+                    break;
+                case "4":
+                    h = "16";
+                    break;
+                case "5":
+                    h = "17";
+                    break;
+                case "6":
+                    h = "18";
+                    break;
+                case "7":
+                    h = "19";
+                    break;
+                case "8":
+                    h = "20";
+                    break;
+                case "9":
+                    h = "21";
+                    break;
+                case "10":
+                    h = "22";
+                    break;
+                case "11":
+                    h = "23";
+                    break;
+                case "12":
+                    h = "24";
+                    break;
+            }
+            return h;
+        }
+
+        public static bool Isdate(string date)
+        {
+            string[] parts = date.Split('/');
+            if ((Convert.ToInt32(parts[0]) >= 1) && (Convert.ToInt32(parts[0]) <= 31) &&
+                (Convert.ToInt32(parts[1]) >= 1) && (Convert.ToInt32(parts[1]) <= 12) && (Convert.ToInt32(parts[2]) >= 1900))
+            {
+                return true;
+            }
+            else return false;
+        }
+
+        public static string ConvertDate (string date)
+        {
+            string[] parts = date.Split("/");
+            string dt = String.Format("{0}/{1}/{2}", parts[1], parts[0], parts[2]);
+            return dt;
         }
 
     }
