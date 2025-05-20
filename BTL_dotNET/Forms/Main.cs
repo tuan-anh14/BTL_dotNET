@@ -29,5 +29,17 @@ namespace BTL_dotNET.Forms
                 Application.Exit();
             }
         }
+        private void mnuHopDong_Click(object sender, EventArgs e)
+        {
+
+            HopDong a = new HopDong();
+            a.FormBorderStyle = FormBorderStyle.None;
+            a.Dock = DockStyle.Fill;
+            a.TopLevel = false;
+            a.TopMost = true;
+            pnlcontent.Controls.Clear();
+            pnlcontent.Controls.Add(a);
+            a.Show();
+        }
     }
 }

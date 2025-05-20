@@ -34,13 +34,12 @@
             mnuKhachHang = new ToolStripMenuItem();
             mnuBao = new ToolStripMenuItem();
             mnuHopDong = new ToolStripMenuItem();
-            mnuHDQuangCao = new ToolStripMenuItem();
-            mnuHDVietBai = new ToolStripMenuItem();
             mnuBaoCao = new ToolStripMenuItem();
             mnuTimKiem = new ToolStripMenuItem();
             mnuTKKhachHang = new ToolStripMenuItem();
             mnuTKHopDong = new ToolStripMenuItem();
             mnuThoat = new ToolStripMenuItem();
+            pnlcontent = new Panel();
             mnusQL.SuspendLayout();
             SuspendLayout();
             // 
@@ -83,22 +82,10 @@
             // 
             // mnuHopDong
             // 
-            mnuHopDong.DropDownItems.AddRange(new ToolStripItem[] { mnuHDQuangCao, mnuHDVietBai });
             mnuHopDong.Name = "mnuHopDong";
             mnuHopDong.Size = new Size(91, 24);
             mnuHopDong.Text = "Hợp đồng";
-            // 
-            // mnuHDQuangCao
-            // 
-            mnuHDQuangCao.Name = "mnuHDQuangCao";
-            mnuHDQuangCao.Size = new Size(282, 26);
-            mnuHDQuangCao.Text = "Chi tiết hợp đồng quảng cáo";
-            // 
-            // mnuHDVietBai
-            // 
-            mnuHDVietBai.Name = "mnuHDVietBai";
-            mnuHDVietBai.Size = new Size(282, 26);
-            mnuHDVietBai.Text = "Chi tiết hợp đồng viết bài";
+            mnuHopDong.Click += mnuHopDong_Click;
             // 
             // mnuBaoCao
             // 
@@ -132,14 +119,26 @@
             mnuThoat.Text = "Thoát";
             mnuThoat.Click += mnuThoat_Click;
             // 
+            // pnlcontent
+            // 
+            pnlcontent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnlcontent.BackColor = Color.FromArgb(250, 248, 238);
+            pnlcontent.BackgroundImage = Properties.Resources.mot_so_bat_cap_trong_quy_dinh_ve_hop_dong_vi_loi_ich_cua_nguoi_thu_ba;
+            pnlcontent.BackgroundImageLayout = ImageLayout.Stretch;
+            pnlcontent.BorderStyle = BorderStyle.FixedSingle;
+            pnlcontent.Location = new Point(0, 31);
+            pnlcontent.Name = "pnlcontent";
+            pnlcontent.Size = new Size(1160, 595);
+            pnlcontent.TabIndex = 2;
+            // 
             // frmMainQL
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            BackgroundImage = Properties.Resources.mot_so_bat_cap_trong_quy_dinh_ve_hop_dong_vi_loi_ich_cua_nguoi_thu_ba;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1160, 627);
+            Controls.Add(pnlcontent);
             Controls.Add(mnusQL);
             MainMenuStrip = mnusQL;
             Name = "frmMainQL";
@@ -159,12 +158,11 @@
         private ToolStripMenuItem mnuKhachHang;
         private ToolStripMenuItem mnuBao;
         private ToolStripMenuItem mnuHopDong;
-        private ToolStripMenuItem mnuHDQuangCao;
-        private ToolStripMenuItem mnuHDVietBai;
         private ToolStripMenuItem mnuBaoCao;
         private ToolStripMenuItem mnuTimKiem;
         private ToolStripMenuItem mnuTKKhachHang;
         private ToolStripMenuItem mnuTKHopDong;
         private ToolStripMenuItem mnuThoat;
+        private Panel pnlcontent;
     }
 }

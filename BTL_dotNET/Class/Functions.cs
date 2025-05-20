@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace BTL_dotNET.Class
 {
@@ -26,5 +27,25 @@ namespace BTL_dotNET.Class
                 MessageBox.Show("Lỗi kết nối: " + ex.Message);
             }
         }
+
+        public static DataTable GetDataToTable(string sql)
+        {
+            SqlDataAdapter mydata = new SqlDataAdapter();
+            mydata.SelectCommand = new SqlCommand(sql, Functions.conn);
+            DataTable table = new DataTable();
+            mydata.Fill(table);
+            return table;
+        }
+
+        public static void Fillcombo(string sql, ComboBox cbo, string ma, string ten)
+        {
+            SqlDataAdapter mydata = new SqlDataAdapter(sql, Functions.conn);
+            DataTable table = new DataTable();
+            mydata.Fill(table);
+            cbo.DataSource = table;
+            cbo.ValueMember = ma;
+            cbo.DisplayMember = ten;
+        }
+
     }
 }

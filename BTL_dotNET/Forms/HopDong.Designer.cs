@@ -47,7 +47,7 @@
             btnTimkiem = new Button();
             btnXuathop = new Button();
             btnDong = new Button();
-            dataGridView = new DataGridView();
+            DataGridView = new DataGridView();
             txtMahopdong = new TextBox();
             txtTennhanvien = new TextBox();
             txtTenkhachhang = new TextBox();
@@ -57,7 +57,7 @@
             cboMahopdong = new ComboBox();
             mskNgayky = new MaskedTextBox();
             mskDienthoai = new MaskedTextBox();
-            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DataGridView).BeginInit();
             SuspendLayout();
             // 
             // lblHopDong
@@ -232,41 +232,42 @@
             btnDong.Text = "Đóng";
             btnDong.UseVisualStyleBackColor = true;
             // 
-            // dataGridView
+            // DataGridView
             // 
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.Location = new Point(74, 255);
-            dataGridView.Name = "dataGridView";
-            dataGridView.RowHeadersWidth = 51;
-            dataGridView.Size = new Size(861, 170);
-            dataGridView.TabIndex = 19;
+            DataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DataGridView.Location = new Point(74, 255);
+            DataGridView.Name = "DataGridView";
+            DataGridView.RowHeadersWidth = 51;
+            DataGridView.Size = new Size(868, 170);
+            DataGridView.TabIndex = 19;
+            DataGridView.CellContentClick += dataGridView_CellContentClick;
             // 
             // txtMahopdong
             // 
             txtMahopdong.Location = new Point(229, 61);
             txtMahopdong.Name = "txtMahopdong";
-            txtMahopdong.Size = new Size(126, 27);
+            txtMahopdong.Size = new Size(151, 27);
             txtMahopdong.TabIndex = 20;
             // 
             // txtTennhanvien
             // 
             txtTennhanvien.Location = new Point(229, 207);
             txtTennhanvien.Name = "txtTennhanvien";
-            txtTennhanvien.Size = new Size(126, 27);
+            txtTennhanvien.Size = new Size(151, 27);
             txtTennhanvien.TabIndex = 21;
             // 
             // txtTenkhachhang
             // 
             txtTenkhachhang.Location = new Point(791, 101);
             txtTenkhachhang.Name = "txtTenkhachhang";
-            txtTenkhachhang.Size = new Size(126, 27);
+            txtTenkhachhang.Size = new Size(151, 27);
             txtTenkhachhang.TabIndex = 22;
             // 
             // txtDiachi
             // 
             txtDiachi.Location = new Point(791, 151);
             txtDiachi.Name = "txtDiachi";
-            txtDiachi.Size = new Size(126, 27);
+            txtDiachi.Size = new Size(151, 27);
             txtDiachi.TabIndex = 23;
             // 
             // cboManhanvien
@@ -298,7 +299,7 @@
             mskNgayky.Location = new Point(229, 108);
             mskNgayky.Mask = "00/00/0000";
             mskNgayky.Name = "mskNgayky";
-            mskNgayky.Size = new Size(125, 27);
+            mskNgayky.Size = new Size(151, 27);
             mskNgayky.TabIndex = 27;
             mskNgayky.ValidatingType = typeof(DateTime);
             // 
@@ -307,13 +308,14 @@
             mskDienthoai.Location = new Point(791, 207);
             mskDienthoai.Mask = "(999) 000-0000";
             mskDienthoai.Name = "mskDienthoai";
-            mskDienthoai.Size = new Size(125, 27);
+            mskDienthoai.Size = new Size(151, 27);
             mskDienthoai.TabIndex = 28;
             // 
             // HopDong
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlLightLight;
             BackgroundImage = Properties.Resources._094835hop_dong_lao_dong_vo_hieu;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1046, 544);
@@ -326,7 +328,7 @@
             Controls.Add(txtTenkhachhang);
             Controls.Add(txtTennhanvien);
             Controls.Add(txtMahopdong);
-            Controls.Add(dataGridView);
+            Controls.Add(DataGridView);
             Controls.Add(btnDong);
             Controls.Add(btnXuathop);
             Controls.Add(btnTimkiem);
@@ -349,7 +351,7 @@
             Name = "HopDong";
             Text = "Hợp Đồng";
             Load += HopDong_Load;
-            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -375,7 +377,7 @@
         private Button btnTimkiem;
         private Button btnXuathop;
         private Button btnDong;
-        private DataGridView dataGridView;
+        private DataGridView DataGridView;
         private TextBox txtMahopdong;
         private TextBox txtTennhanvien;
         private TextBox txtTenkhachhang;
